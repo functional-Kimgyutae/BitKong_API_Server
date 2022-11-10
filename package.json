@@ -1,0 +1,30 @@
+{
+  "name": "bitkong_api_server",
+  "version": "1.0.0",
+  "description": "비트콩 node js로 api 서버 구축",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/functional-Kimgyutae/BitKong_API_Server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/functional-Kimgyutae/BitKong_API_Server/issues"
+  },
+  "homepage": "https://github.com/functional-Kimgyutae/BitKong_API_Server#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "oracledb": "^5.5.0",
+    "path": "^0.12.7"
+  }
+}
