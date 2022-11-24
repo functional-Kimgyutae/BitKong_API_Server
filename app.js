@@ -3,6 +3,8 @@ const path = require("path");
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser')
 const routes = require("./routes/index.js");
+const mark = require("./market.js") 
+mark.start();
 const app = express();
 
 dotenv.config();
@@ -26,3 +28,5 @@ app.use((err,req,res,next) => {
 app.listen(app.get('port'),(req,res) => {
     console.log(app.get('port'),"포트 열림")
 })
+
+

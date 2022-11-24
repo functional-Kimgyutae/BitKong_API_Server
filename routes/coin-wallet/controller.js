@@ -5,7 +5,7 @@ const send = require('../../lib/sendAPI')
 const SELECT_ALL = 'select * from coin_wallet where m_id = :1'
 const SELECT_ONE = 'select * from coin_wallet where m_id = :1 and coin_id = :2'
 const INSERT_COIN = 'insert into coin_wallet values(:1,:2,:3,:4)'
-const UPDATE_COIN = 'update coin_wallet set(price=:3,cnt=:4) where m_id = :1 and coin_id = :2'
+const UPDATE_COIN = "update coin_wallet set price=:3,cnt=:4 where m_id = ':1' and coin_id = ':2'"
 const DELETE_COIN = 'delete from coin_wallet where m_id = :1 and coin_id = :2'
 exports.SelectAll = async(req, res, next) => {
     let data = await conn.executeQuery(SELECT_ALL,[req.params.id]);
@@ -17,33 +17,35 @@ exports.SelectAll = async(req, res, next) => {
             'price':data[i][2],
             'cnt':data[i][3],
         }
-        ob[i] = d
+        ob[i] = d   
     }
     send.success(res,ob);
 }   
 exports.InsertOne = async(req, res, next) => {
     const data = await conn.executeQuery(SELECT_ONE,[req.params.id,req.body.coin_id])  
     if(data[0] == null) {
-        conn.executeUpdate(INSERT_COIN,[req.params.id,req.body.coin_id,req.body.price,req.body.cnt])
+        let s = await conn.executeUpdate(INSERT_COIN,[req.params.id,req.body.coin_id,req.body.price,req.body.cnt])
     }else {
-        let id = data[0][0];
-        let coin_id = data[0][1];
-        let price = data[0][2] + req.body.price;
-        let cnt = data[0][3] + req.body.cnt;
-        conn.executeUpdate(UPDATE_COIN,[id,coin_id,price,cnt])
+        let id = req.params.id;
+        let coin_id = req.body.coin_id;
+        let price = data[0][2] + req.body.price * 1;
+        let cnt = data[0][3] + req.body.cnt * 1;
+        let a = await conn.executeUpdate("update coin_wallet set price="+price+",cnt="+cnt+" where m_id = '"+id+"' and coin_id = '"+coin_id+"'")
     }
     send.success(res,"success");                                                
 }
 exports.UpdateOne = async(req, res, next) => {  
     const data = await conn.executeQuery(SELECT_ONE,[req.params.id,req.body.coin_id])  
-    let id = data[0][0];
-    let coin_id = data[0][1];
-    let price = data[0][2] - req.body.price;
-    let cnt = data[0][3] - req.body.cnt;
-    if(cnt <= 0){
-        conn.executeUpdate(DELETE_COIN,[id,coin_id])
+    let id = req.params.id;
+    let coin_id = req.body.coin_id;
+    let price = data[0][2] - req.body.price * 1;
+    let cnt = data[0][3] - req.body.cnt * 1;
+    if(cnt <=0){
+        console.log("이게 실행")
+        let a =conn.executeUpdate(DELETE_COIN,[id,coin_id])
+        
     }else {
-        conn.executeUpdate(UPDATE_COIN,[id,coin_id,price,cnt])
+        let a = await conn.executeUpdate("update coin_wallet set price="+price+",cnt="+cnt+" where m_id = '"+id+"' and coin_id = '"+coin_id+"'")
     }
     send.success(res,"success"); 
 }   

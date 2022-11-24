@@ -6,4 +6,4 @@ router.get('/:id',controller.SelectAll)
 router.post('/:id',controller.InsertOne)
 router.put('/:id',controller.UpdateOne)
 
-module.exports = router
+module.exports = router 
